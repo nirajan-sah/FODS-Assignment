@@ -1,4 +1,4 @@
-class Student():
+class Student:
     def __init__(self, id, name, address, year, lvl, sec):
         self.id = id
         self.name = name
