@@ -1,2 +1,3 @@
-(34, 'Nirajan Sah', 'Nakhipot', '9746597468', 'Nirajan', 12, 12000.0)
-(1, 'ni', '5', '5', '5', 5, 5.0)
+Employee ID,Name,Address,Contact,Spouse,Number of Children,Salary
+12,Nirajan,Nakhipot,9746597468,Null,0,50000.0
+12,Nirajan Sah,"Nakhipot, 5",9746597468,Null,0,50000.0
