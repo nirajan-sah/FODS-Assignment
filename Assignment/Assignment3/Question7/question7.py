@@ -24,7 +24,7 @@ class Employee:
 
     def fetchdata(self):
         try: 
-            df = pd.read_csv("employees.csv")
+            df = pd.read_csv(CSV_FILE)
             print(df)
         except Exception as e:
             print("Error opening file", e)
