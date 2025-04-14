@@ -7,7 +7,7 @@ set2 = {10, 20, 30, 40, 50, 60}
 
 #Code to find union
 union = set1.union(set2)
-print(len(union))
+print("The total numbers in union are",len(union))
 
 #Code to find intersection
 intersection = set1.intersection(set2)
