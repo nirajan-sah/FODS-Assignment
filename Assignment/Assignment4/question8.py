@@ -1,3 +1,8 @@
+'''
+A program that use pandas to 
+add, subtract, multiply and divide
+3 Pandas series
+'''
 import pandas as pd
 
 # Create two Series
