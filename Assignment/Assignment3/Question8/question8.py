@@ -1,6 +1,9 @@
 import pandas as pd
 import numpy as np
 
+'''
+A simple library system
+'''
 BOOKS_FILE = "library_books.csv"
 
 class Library:
@@ -36,16 +39,15 @@ class Library:
             print("Error saving books:", e)
 
     def add_book(self, book_id, title, author):
-        """Adds a new book to the library DataFrame and saves the file."""
-
-        # Check if book_id already exists to avoid duplicates.
-        if self.books[self.books["Book ID"] == book_id].empty:
-            new_row = pd.DataFrame([[book_id, title, author, False]], columns=self.columns)
-            self.books = pd.concat([self.books, new_row], ignore_index=True)
-            self.save_books()
-            print(f"Book '{title}' added successfully.")
-        else:
+        """Add a new book if the ID is not already in the library."""
+        if book_id in self.books["Book ID"].values:
             print("A book with this ID already exists.")
+            return
+
+        self.books.loc[len(self.books)] = [book_id, title, author, False]
+        self.save_books()
+        print(f"Book '{title}' added successfully.")
+
 
     def issue_book(self, book_id):
         """Issues a book by setting its 'Is Issued' status to True using numpy."""
@@ -140,8 +142,4 @@ def main_menu():
         else:
             print("Invalid choice. Please select from the menu.")
 
-if __name__ == "__main__":
-    try:
-        main_menu()
-    except Exception as e:
-        print("An unexpected error occurred:", e)
+main_menu()

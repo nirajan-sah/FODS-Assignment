@@ -1,9 +1,15 @@
 import pandas as pd
-import os
 import csv
+'''
+A class emplyee with attributes and to write the data in a csv file 
+Also, a function to fetch data from the file
+It is done by importing two important libraries
+'''
 
+#Having global path for employees.csv
 CSV_FILE = "employees.csv"
 class Employee:
+    #Constructor to initialize
     def __init__(self, empid, name, address, contact, spouse, number_of_child, salary):
         self.empid = empid
         self.name = name
@@ -13,15 +19,13 @@ class Employee:
         self.number_of_child = number_of_child
         self.salary = salary
 
+    #function to write into file
     def intofile(self):
-        write_header = not os.path.isfile(CSV_FILE) or os.stat(CSV_FILE).st_size == 0
-
         with open(CSV_FILE, "a", newline="") as file:
             writer = csv.writer(file)
-            if write_header:
-                writer.writerow(["Employee ID", "Name", "Address", "Contact", "Spouse", "Number of Children", "Salary"])
             writer.writerow([self.empid, self.name, self.address, self.contact, self.spouse, self.number_of_child, self.salary]) 
-
+    
+    #function to fetch data from the file
     def fetchdata(self):
         try: 
             df = pd.read_csv(CSV_FILE)
@@ -30,6 +34,7 @@ class Employee:
             print("Error opening file", e)
 
 
+#Prompt user to get input with error handling
 try:
     empid = int(input("Enter the employee id: "))
     name = str(input("Enter the employee name: "))
@@ -42,6 +47,9 @@ except Exception as e:
     print("Please enter a correct form of value", e)
     exit(0)
 
+#Calling class instance
 e1 = Employee(empid, name, address, contact,spouse, number_of_child, salary)
+
+#Calling class function through instance
 e1.intofile()
 e1.fetchdata()
