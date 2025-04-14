@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 
 '''
 A simple library system
@@ -8,26 +7,24 @@ BOOKS_FILE = "library_books.csv"
 
 class Library:
     def __init__(self):
-        # Define the columns for our DataFrame.
         self.columns = ["Book ID", "Title", "Author", "Is Issued"]
-        self.books = self.issue_books()
+        self.books = self.load_books()
 
-    def issue_books(self):
+    def load_books(self):
         """Loads book details from the CSV file into a pandas DataFrame.
            If the file doesn't exist, an empty DataFrame is created.
         """
         try:
             df = pd.read_csv(BOOKS_FILE)
-            # Convert "Is Issued" column to boolean if it exists.
             if "Is Issued" in df.columns:
                 df["Is Issued"] = df["Is Issued"].astype(bool)
-            print("Books issued successfully.")
+            print("Books loaded successfully.")
             return df
         except FileNotFoundError:
             print("Books file not found. Starting with an empty library.")
             return pd.DataFrame(columns=self.columns)
         except Exception as e:
-            print("Error issueing books:", e)
+            print("Error loading books:", str(e))
             return pd.DataFrame(columns=self.columns)
 
     def save_books(self):
@@ -36,43 +33,50 @@ class Library:
             self.books.to_csv(BOOKS_FILE, index=False)
             print("Books saved successfully.")
         except Exception as e:
-            print("Error saving books:", e)
+            print("Error saving books:", str(e))
 
     def add_book(self, book_id, title, author):
         """Add a new book if the ID is not already in the library."""
+        book_id = str(book_id).strip()
+        title = title.strip()
+        author = author.strip()
+
         if book_id in self.books["Book ID"].values:
             print("A book with this ID already exists.")
             return
 
-        self.books.loc[len(self.books)] = [book_id, title, author, False]
+        new_book = {"Book ID": book_id, "Title": title, "Author": author, "Is Issued": False}
+        self.books = pd.concat([self.books, pd.DataFrame([new_book])], ignore_index=True)
         self.save_books()
         print(f"Book '{title}' added successfully.")
 
-
     def issue_book(self, book_id):
-        """Issues a book by setting its 'Is Issued' status to True using numpy."""
-        idx = self.books.index[self.books["Book ID"] == book_id].tolist()
-        if idx:
-            index = idx[0]
-            if not self.books.at[index, "Is Issued"]:
-                # Using numpy's where to update the status conditionally.
-                self.books["Is Issued"] = np.where(self.books["Book ID"] == book_id, True, self.books["Is Issued"])
+        """Issues a book by setting its 'Is Issued' status to True."""
+        book_id = str(book_id).strip()
+        mask = self.books["Book ID"] == book_id
+
+        if mask.any():
+            if not self.books.loc[mask, "Is Issued"].values[0]:
+                self.books.loc[mask, "Is Issued"] = True
                 self.save_books()
-                print(f"Book '{self.books.at[index, 'Title']}' has been issued.")
+                title = self.books.loc[mask, "Title"].values[0]
+                print(f"Book '{title}' has been issued.")
             else:
                 print("This book is already issued.")
         else:
             print("Book ID not found.")
 
     def return_book(self, book_id):
-        """Returns a book by setting its 'Is Issued' status to False using numpy."""
-        idx = self.books.index[self.books["Book ID"] == book_id].tolist()
-        if idx:
-            index = idx[0]
-            if self.books.at[index, "Is Issued"]:
-                self.books["Is Issued"] = np.where(self.books["Book ID"] == book_id, False, self.books["Is Issued"])
+        """Returns a book by setting its 'Is Issued' status to False."""
+        book_id = str(book_id).strip()
+        mask = self.books["Book ID"] == book_id
+
+        if mask.any():
+            if self.books.loc[mask, "Is Issued"].values[0]:
+                self.books.loc[mask, "Is Issued"] = False
                 self.save_books()
-                print(f"Book '{self.books.at[index, 'Title']}' has been returned.")
+                title = self.books.loc[mask, "Title"].values[0]
+                print(f"Book '{title}' has been returned.")
             else:
                 print("This book was not issued.")
         else:
@@ -80,10 +84,10 @@ class Library:
 
     def search_book(self, query):
         """Search for books by title or author using pandas filtering."""
-        query = query.lower()
+        query = query.lower().strip()
         results = self.books[
-            self.books["Title"].str.lower().str.contains(query) |
-            self.books["Author"].str.lower().str.contains(query)
+            self.books["Title"].str.lower().str.contains(query, na=False) |
+            self.books["Author"].str.lower().str.contains(query, na=False)
         ]
         return results
 
@@ -95,10 +99,11 @@ class Library:
             print("\nLibrary Books:")
             print(self.books.to_string(index=False))
 
+
 def main_menu():
     library = Library()
 
-    # For demonstration, add some default books if the library is empty.
+    # Add some default books if the library is empty.
     if library.books.empty:
         library.add_book("1", "The Great Gatsby", "F. Scott Fitzgerald")
         library.add_book("2", "1984", "George Orwell")
@@ -113,16 +118,16 @@ def main_menu():
         print("5. Add a Book")
         print("6. Exit")
 
-        choice = input("Enter your choice (1-6): ")
+        choice = input("Enter your choice (1-6): ").strip()
 
         if choice == "1":
-            book_id = input("Enter the Book ID to issue: ")
+            book_id = input("Enter the Book ID to issue: ").strip()
             library.issue_book(book_id)
         elif choice == "2":
-            book_id = input("Enter the Book ID to return: ")
+            book_id = input("Enter the Book ID to return: ").strip()
             library.return_book(book_id)
         elif choice == "3":
-            query = input("Enter title or author to search: ")
+            query = input("Enter title or author to search: ").strip()
             results = library.search_book(query)
             if not results.empty:
                 print("\nSearch Results:")
@@ -141,5 +146,6 @@ def main_menu():
             break
         else:
             print("Invalid choice. Please select from the menu.")
+
 
 main_menu()

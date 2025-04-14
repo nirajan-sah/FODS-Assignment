@@ -1,5 +1,6 @@
 Employee ID,Name,Address,Contact,Spouse,Number of Children,Salary
 12,Nirajan,Nakhipot,9746597468,Null,0,50000.0
 43,Nirajan Shah,Golbazar,9842126288,Null,0,1200000.0
-1,nirajan,dfa,12,1,2,12.0
-1,nria,fa,12,1,1,12.0
+1,nirajan,dfa,12,Null,2,12.0
+12,Nirajan,Nakhipot,97488888,Null,1,500.0
+34,Rajan,Golbazar,9746597468,Rajan,12,12000.0
