@@ -1,12 +1,8 @@
 '''
 Program for a simple guessing game.
-
 Generating a random number and letting the user to guess the number
-
 Checks if the number entered by the user is too low or too high and returns result
-
 If the user enters the right number it prints You won
-
 If the user exceed the given attempt which is 5 then program displays "Game Over"
 '''
 
