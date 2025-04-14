@@ -1,52 +1,30 @@
-list1 = []
-list2 = []
+'''
+Program that prompts user for names and store them in list and displayes how many a's are there in all the list
+'''
 
-def numenter(n):
-    while True:
-        print(f"\nEntered numbers are {n}")
-        data = input("Enter a number ('quit' to exit): ")
+#Initialize list
+name = []
+while True:
+    #Prompt user for name if n == 0 program is turnicated
+    n = str(input("Enter names and to exit '0': "))
 
-        if data == 'quit':
-            break
+    if n == '0':
+        break
 
-        number = int(data)
-        n.append(number)
+    #appending n in list
+    name.append(n)
 
-def samelength(l1, l2):
-    if len(l1) == len(l2):
-        print("\nIt is of same length")
-    else:
-        print("\nThe both list are of different length")
+    #Initial value of a's is 0
+    reuslt = 0
 
-def samevalue(l1, l2):
-    res1 = 0
-    res2 = 0
-    for i in range(len(l1)):
-        res1 += l1[i]
+    #Get single name the list
+    for ele in name:
+        #Check all the character from the name if character is a then adds 1 to result
+        for char in ele:
+            #Lowering the character to get precise result
+            if char.lower() == 'a':
+                reuslt += 1
 
-    for j in range(len(l2)):
-        res2 += l2[j]
-
-    if res1 == res2:
-        print("The sum of all elements of both list are same.")
-    else:
-        print("The sum of all elements of both list are not same.")
-
-def occurvalue(l1, l2):
-    for i in range(len(l1)):
-        for j in range(len(l2)):
-            if l1[i] == l2[i]:
-                return True
-    return False
-       
-
-
-numenter(list1)
-numenter(list2)
-
-samelength(list1, list2)
-samevalue(list1, list2)
-if occurvalue(list1, list2):
-    print("It occurs!")
-else:
-    print("It doesn't occur")
+#Printing the result
+print(f"{name}\n")
+print(f"The total number of letter a in the list is {reuslt}\n")    
